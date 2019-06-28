@@ -45,8 +45,8 @@ class CarController extends Controller
 
         $car = new Car([
             'board'         => strtoupper($request->board),
-            // 'picture'       => '/storage/'. $path,
-            'picture'       => '/storage/'. $request->picture,
+            'picture'       => '/storage/'. $path,
+            // 'picture'       => '/storage/'. $request->picture,
             'car_type_id'   => $request->car_type_id,
             'cilindraje_id' => $request->cilindraje_id,
             'color_id'      => $request->color_id,
