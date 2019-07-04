@@ -163,7 +163,7 @@ class AuthController extends Controller
 
             $user->update();
             \Mail::to($email)->send(new UpdatePassword($email,$password,$user->names));
-            return response()->json(['password' => $password]);
+            return response()->json(['success' => $password]);
         } else {
             return response()->json(['message' => 'Usuario no existe']);
         }
