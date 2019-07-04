@@ -15,6 +15,11 @@ class CarTypeTableSeeder extends Seeder
         CarType::truncate();
 
         $car_type = new CarType;
+        $car_type->name = "Automóvil";
+        $car_type->picture = "/movil/img/tipo_vehiculo/automovil.png";
+        $car_type->save();
+
+        $car_type = new CarType;
         $car_type->name = "Campero";
         $car_type->picture = "/movil/img/tipo_vehiculo/campero.png";
         $car_type->save();

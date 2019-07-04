@@ -218,6 +218,7 @@
 @stop
 @section('js')
     <script src="/backend/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/backend/js/update_state_users.js"></script>
     {{--<script>
         $(document).ready(function() {
             $('#admin_users').DataTable();
