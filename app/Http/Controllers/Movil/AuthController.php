@@ -95,17 +95,33 @@ class AuthController extends Controller
         $check = User::whereEmail($email)->first();
         if ($check) {
             $user = $check;
+            $tokenResult = $user->createToken('Personal Access Token');
+            $token = $tokenResult->token;
+            if ($request->remember_me) {
+                $token->expires_at = Carbon::now()->addWeeks(1);
+            }
+            $token->save();
+            return response()->json([
+                'access_token' => $tokenResult->accessToken,
+                'token_type'   => 'Bearer',
+                'expires_at'   => Carbon::parse(
+                    $tokenResult->token->expires_at)
+                    ->toDateTimeString(),
+                'message' => 'Usuario logeado',
+            ]);
+
         } else {
                 $user = new User([
-                    'names' => $request->name,
+                    'names' => $request->names,
                     'email' => $email,
                     'slug' => Str::slug($request->name. mt_rand(1,10000), '-'),
                     'avatar' => $request->avatar,
+                    'last_name' => $request->last_name,
                 ]);
                 $user->save();
                 //a este usuario le asignamos los roles, Artista y Patrocinador
                 $user->roles()->attach(['3']);
-                //Almacenamos en la base de datos el proveedor de red social con el cual el usuario ha hecho login
+                // Almacenamos en la base de datos el proveedor de red social con el cual el usuario ha hecho login
                 UserSocialAccount::create([
                     'user_id' => $user->id,
                     'provider' => 'Facebook',
@@ -124,27 +140,28 @@ class AuthController extends Controller
                 'expires_at'   => Carbon::parse(
                     $tokenResult->token->expires_at)
                     ->toDateTimeString(),
-                'message' => 'Successfully created user!'
+                'message' => 'Successfully created user!',
+                'usuario' => $user,
             ], 201);
         }
-        if ($success === true) {
+        // if ($success === true) {
 
-            $user = $check;
-            $tokenResult = $user->createToken('Personal Access Token');
-            $token = $tokenResult->token;
-            if ($request->remember_me) {
-                $token->expires_at = Carbon::now()->addWeeks(1);
-            }
-            $token->save();
-            return response()->json([
-                'access_token' => $tokenResult->accessToken,
-                'token_type'   => 'Bearer',
-                'expires_at'   => Carbon::parse(
-                    $tokenResult->token->expires_at)
-                    ->toDateTimeString(),
-            ]);
+            // $user = $check;
+            // $tokenResult = $user->createToken('Personal Access Token');
+            // $token = $tokenResult->token;
+            // if ($request->remember_me) {
+            //     $token->expires_at = Carbon::now()->addWeeks(1);
+            // }
+            // $token->save();
+            // return response()->json([
+            //     'access_token' => $tokenResult->accessToken,
+            //     'token_type'   => 'Bearer',
+            //     'expires_at'   => Carbon::parse(
+            //         $tokenResult->token->expires_at)
+            //         ->toDateTimeString(),
+            // ]);
 
-        }
+        // }
     }
 
 }
