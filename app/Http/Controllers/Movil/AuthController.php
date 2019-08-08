@@ -101,7 +101,6 @@ class AuthController extends Controller
         $check = User::whereEmail($email)->first();
         if ($check) {
             $user = $check;
-           
         } else {
             $user = new User([
                 'names' => $request->names,
@@ -134,7 +133,6 @@ class AuthController extends Controller
                 )
                     ->toDateTimeString(),
                 'message' => 'Successfully created user!',
-                'usuario' => $user,
             ], 201);
         }
         if ($success === true) {
