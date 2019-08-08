@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Movil;
 
 use App\Mail\NewClienteUpper;
+use App\Mail\UpdatePassword;
 use App\UserSocialAccount;
 use Illuminate\Http\Request;
 use App\User;
@@ -114,7 +115,7 @@ class AuthController extends Controller
                 $user = new User([
                     'names' => $request->names,
                     'email' => $email,
-                    'slug' => Str::slug($request->name. mt_rand(1,10000), '-'),
+                    'slug' => Str::slug($request->names.'-'.mt_rand(1,10000), '-'),
                     'avatar' => $request->avatar,
                     'last_name' => $request->last_name,
                 ]);
@@ -162,6 +163,28 @@ class AuthController extends Controller
             // ]);
 
         // }
+    }
+
+    public function forgotPassword (Request $request){
+        $this->validate($request, [
+            'email' => 'required|email'
+        ]);
+        $email = $request->email;
+        $check = User::whereEmail($email)->first();
+        $password = Str::random(8);
+        $pass = bcrypt($password);
+
+        if ($check) {
+            $user = User::where('email', $email)->first();
+            $user->password = $pass;
+
+            $user->update();
+            \Mail::to($email)->send(new UpdatePassword($email,$password,$user->names));
+            return response()->json(['success' => $password]);
+        } else {
+            return response()->json(['message' => 'Usuario no existe']);
+        }
+
     }
 
 }

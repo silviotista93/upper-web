@@ -30,10 +30,12 @@ class NewUserRegister extends Mailable
      */
     public function build()
     {
-        return $this
-            ->subject(__('Tus credenciales de acceso a '.config('app.name')))
-            ->markdown('emails.new_cliente_upper')
-            ->with('user',$this->user)
-            ->with('password',$this->password);
+        return (new MailMessage)
+            ->subject('Solicitud de reestablecimiento de contraseña')
+            ->greeting('Hola '.$this->user->name)
+            ->line('Recibes este email porque se solicitó un restablecimiento de contraseña para tu cuenta.')
+            ->action('Reestablecer Contraseña', url(config('app.url').route('password.reset', $this->token, false)))
+            ->line('Si no realizaste esta petición, puedes ignorar este correo y nada habrá cambiado.')
+            ->salutation('¡Saludos!');
     }
 }
