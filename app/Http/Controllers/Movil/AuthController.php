@@ -40,7 +40,7 @@ class AuthController extends Controller
 
         \Mail::to($user->email)->send(new NewClienteUpper($user->email, $password));
         return response()->json([
-            'message' => 'Creado exitosamente!'
+            'message' => 'Creado exitosamente!',
         ], 201);
     }
 
@@ -93,7 +93,7 @@ class AuthController extends Controller
         return response()->json(['roles' => $userRol]);
     }
 
-    public function loginFacebook(Request $request)
+    public function loginWithAccount(Request $request)
     {
         $user = null; //Declaramos la variable user null para despues usarla y validar que los datos del usuarios son null
         $success = true; //$success es para al final del registro dar una alerta de que ha sido un exito
@@ -115,7 +115,7 @@ class AuthController extends Controller
             // Almacenamos en la base de datos el proveedor de red social con el cual el usuario ha hecho login
             UserSocialAccount::create([
                 'user_id' => $user->id,
-                'provider' => 'Facebook',
+                'provider' => $request->account ,
                 'provider_uid' => $request->id,
             ]);
 
@@ -151,7 +151,6 @@ class AuthController extends Controller
                 $tokenResult->token->expires_at)
                 ->toDateTimeString(),
         ]);
-
         }
     }
 
@@ -176,4 +175,5 @@ class AuthController extends Controller
             return response()->json(['message' => 'Usuario no existe']);
         }
     }
+
 }

@@ -22,7 +22,7 @@ Route::group(['prefix' => 'auth', 'namespace'=>'Movil'], function () {
     /*=============================================
         RUTAS PARA LOGIN REDES SOCIALES
     =============================================*/
-    Route::post('login-facebook', 'AuthController@loginFacebook');
+    Route::post('login-account', 'AuthController@loginWithAccount');
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');
     Route::post('forgot-password', 'AuthController@forgotPassword');
