@@ -119,6 +119,7 @@ class AuthController extends Controller
                 'provider_uid' => $request->id,
             ]);
 
+            $user = $check;
             $tokenResult = $user->createToken('Personal Access Token');
             $token = $tokenResult->token;
             if ($request->remember_me) {
@@ -129,8 +130,7 @@ class AuthController extends Controller
                 'access_token' => $tokenResult->accessToken,
                 'token_type'   => 'Bearer',
                 'expires_at'   => Carbon::parse(
-                    $tokenResult->token->expires_at
-                )
+                    $tokenResult->token->expires_at)
                     ->toDateTimeString(),
                 'message' => 'Successfully created user!',
             ], 201);
