@@ -101,19 +101,6 @@ class AuthController extends Controller
         $check = User::whereEmail($email)->first();
         if ($check) {
             $user = $check;
-            $tokenResult = $user->createToken('Personal Access Token');
-            $token = $tokenResult->token;
-            if ($request->remember_me) {
-                $token->expires_at = Carbon::now()->addWeeks(1);
-            }
-            $token->save();
-            return response()->json([
-                'access_token' => $tokenResult->accessToken,
-                'token_type'   => 'Bearer',
-                'expires_at'   => Carbon::parse(
-                    $tokenResult->token->expires_at)
-                    ->toDateTimeString(),
-            ]);
         } else {
             $user = new User([
                 'names' => $request->names,
@@ -128,11 +115,32 @@ class AuthController extends Controller
             // Almacenamos en la base de datos el proveedor de red social con el cual el usuario ha hecho login
             UserSocialAccount::create([
                 'user_id' => $user->id,
-                'provider' => $request->account ,
+                'provider' => $request->account,
                 'provider_uid' => $request->id,
             ]);
 
-            $check = User::whereEmail($email)->first();
+            // $check = User::whereEmail($email)->first();
+            $check =  $user ;
+           
+            $tokenResult = $user->createToken('Personal Access Token');
+            $token = $tokenResult->token;
+            if ($request->remember_me) {
+                $token->expires_at = Carbon::now()->addWeeks(1);
+            }
+            $token->save();
+
+            return response()->json([
+                'access_token' => $tokenResult->accessToken,
+                'token_type'   => 'Bearer',
+                'expires_at'   => Carbon::parse(
+                    $tokenResult->token->expires_at
+                )
+                    ->toDateTimeString(),
+                'message' => 'Successfully created user!',
+            ], 201);
+        }
+        if ($success === true) {
+
             $user = $check;
             $tokenResult = $user->createToken('Personal Access Token');
             $token = $tokenResult->token;
@@ -140,19 +148,14 @@ class AuthController extends Controller
                 $token->expires_at = Carbon::now()->addWeeks(1);
             }
             $token->save();
-            
             return response()->json([
                 'access_token' => $tokenResult->accessToken,
                 'token_type'   => 'Bearer',
                 'expires_at'   => Carbon::parse(
-                    $tokenResult->token->expires_at)
+                    $tokenResult->token->expires_at
+                )
                     ->toDateTimeString(),
-                'message' => 'Successfully created user!',
-            ], 201);
-        }
-        if ($success === true) {
-
-        
+            ]);
         }
     }
 
@@ -177,5 +180,4 @@ class AuthController extends Controller
             return response()->json(['message' => 'Usuario no existe']);
         }
     }
-
 }
