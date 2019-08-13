@@ -119,14 +119,15 @@ class AuthController extends Controller
                 'provider_uid' => $request->id,
             ]);
 
-           
+            $check = User::whereEmail($email)->first();
+            $user = $check;
             $tokenResult = $user->createToken('Personal Access Token');
             $token = $tokenResult->token;
             if ($request->remember_me) {
                 $token->expires_at = Carbon::now()->addWeeks(1);
             }
             $token->save();
-            $user = $check;
+            
             return response()->json([
                 'access_token' => $tokenResult->accessToken,
                 'token_type'   => 'Bearer',
