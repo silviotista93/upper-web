@@ -146,6 +146,7 @@ class AuthController extends Controller
             ]);
 
         }
+        return 'hola be';
     }
 
     public function forgotPassword (Request $request){

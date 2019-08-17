@@ -386,7 +386,6 @@
 <script src="/backend/js/layout.js"></script>
 <!--Menu sidebar -->
 <script src="/backend/js/sidebarmenu.js"></script>
-<script src="/backend/js/update_state_users.js"></script>
 <!--stickey kit -->
 <script src="/backend/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
 <script src="/backend/assets/plugins/sparkline/jquery.sparkline.min.js"></script>

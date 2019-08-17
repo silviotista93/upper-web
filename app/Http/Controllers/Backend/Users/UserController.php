@@ -11,10 +11,16 @@ use Illuminate\Support\Str;
 class UserController extends Controller
 {
     public function index (){
+
+        return view('backend.users.admin_users');
+
+    }
+
+    public function usersDataTables(){
         $users = User::with('roles')->whereHas('roles',function ($q){
             $q->where('roles_id','=',1);
         })->get();
-        return view('backend.users.admin_users', compact('users'));
+        return datatables()->of($users)->toJson();
     }
 
     public function store (Request $request) {
