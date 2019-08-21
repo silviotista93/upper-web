@@ -19,6 +19,9 @@ class CreateCarSubscriptionsTable extends Migration
             $table->foreign('subscription_id')->references('id')->on('subscriptions');
             $table->unsignedInteger('cars_id');
             $table->foreign('cars_id')->references('id')->on('cars');
+            $table->unsignedInteger('type_wash_id');
+            $table->foreign('type_wash_id')->references('id')->on('wash_types');
+            $table->integer('quantity');
             $table->timestamps();
         });
     }
