@@ -20,88 +20,15 @@
     <!-- ============================================================== -->
     <!-- End Bread crumb and right sidebar toggle -->
     <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Container fluid  -->
-    <!-- ============================================================== -->
+
     <div class="container-fluid">
         <!-- ============================================================== -->
         <!-- Start Page Content -->
         <!-- ============================================================== -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Usuarios</h4>
-                        <h6 class="card-subtitle">Usuarios registrados en el sistema</h6>
-                        <button type="button" class="btn btn-info btn-rounded pull-right" data-toggle="modal"
-                                data-target="#add-contact">Agregar nuevo usuario
-                        </button>
 
-                        <div class="table-responsive m-t-40">
-                            <div class="table-responsive">
-                                <table id="demo-foo-addrow" class="table m-t-30 table-hover no-wrap contact-list"
-                                       data-page-size="10">
-                                    <thead>
-                                    <tr>
-                                        <th>ID #</th>
-                                        <th>Nombres</th>
-                                        <th>Email</th>
-                                        <th>Teléfono</th>
-                                        <th>Estado</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($users as $user)
-                                        <tr>
-                                            <td>{{ $user->id }}</td>
-                                            <td>
-                                                <a href="{{ route('profile_user', $user->slug )}}"><img
-                                                        src="{{ config('app.url'). $user->avatar }}" alt="user"
-                                                        class="img-circle"/> {{ $user->names }} {{ $user->last_name }}
-                                                </a>
-                                            </td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>{{ $user->phone_1 }}</td>
-                                            <td>
-                                                @if($user->id !== auth()->user()->id)
-                                                <div class="switch">
-                                                    <label>Inactivo
-                                                        <input type="checkbox" {{ $user->state === '1' ? 'checked':''}} data-toggle="toggle"
-                                                               data-size="small" data-id="{{ $user->id }}"><span class="lever"></span>Activo</label>
-                                                </div>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <button type="button"
-                                                        class="btn btn-sm btn-icon btn-pure btn-outline delete-row-btn"
-                                                        data-toggle="tooltip" data-original-title="Delete"><i
-                                                        class="ti-close" aria-hidden="true"></i></button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <td colspan="6">
-                                            <div class="text-right">
-                                                <ul class="pagination"></ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <form id="form_update_state_users" action="{{ route('update_state_users', ['__id__', '__state__']) }}"
-                                  method="post">
-                                @method('PUT')
-                                @csrf
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- COMPONENTE DATATABLES USUARIOS  -->
+        <admin-users></admin-users>
+        <!-- MODAL AGREGAR USUAIO  -->
         <div id="add-contact" class="modal fade in" tabindex="-1" role="dialog"
              aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -113,46 +40,49 @@
                                 aria-hidden="true">×
                         </button>
                     </div>
-                    <form method="POST" class="form-horizontal form-material"
-                          action="{{ route('admin-create-users') }}">
-                        @csrf
-                        <div class="modal-body">
 
-
-                            <div class="form-group">
-                                <div class="col-md-12 m-b-20">
-                                    <input required type="text" name="names" value="{{old('names')}}"  class="form-control"
-                                           placeholder="Nombres"></div>
-                                {!! $errors->first('names','<span class="help-block">*:message</span>')!!}
-                                <div class="col-md-12 m-b-20">
-                                    <input required type="text" value="{{old('last_name')}}" name="last_name" class="form-control"
-                                           placeholder="Apellidos"></div>
-                                {!! $errors->first('last_name','<span class="help-block">*:message</span>')!!}
-                                <div class="col-md-12 m-b-20">
-                                    <input required type="email" value="{{old('email')}}" name="email" class="form-control"
-                                           placeholder="Email">
-                                    {!! $errors->first('email','<span class="help-block">*:message</span>')!!}
-                                </div>
-                                <div class="col-md-12 m-b-20">
-                                    <input required type="text" data-mask="(999) 999-9999" name="phone_1" value="{{old('email')}}" class="form-control"
-                                           placeholder="Teléfono">
-                                    {!! $errors->first('email','<span class="help-block">*:message</span>')!!}
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-info">Agregar
-                            </button>
-                            <button type="button" class="btn btn-default waves-effect"
-                                    data-dismiss="modal">Cancel
-                            </button>
-                        </div>
-                    </form>
                 </div>
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
+            <form method="POST" class="form-horizontal form-material"
+                  action="{{ route('admin-create-users') }}">
+                @csrf
+                <div class="modal-body">
+
+
+                    <div class="form-group">
+                        <div class="col-md-12 m-b-20">
+                            <input required type="text" name="names" value="{{old('names')}}" class="form-control"
+                                   placeholder="Nombres"></div>
+                        {!! $errors->first('names','<span class="help-block">*:message</span>')!!}
+                        <div class="col-md-12 m-b-20">
+                            <input required type="text" value="{{old('last_name')}}" name="last_name"
+                                   class="form-control"
+                                   placeholder="Apellidos"></div>
+                        {!! $errors->first('last_name','<span class="help-block">*:message</span>')!!}
+                        <div class="col-md-12 m-b-20">
+                            <input required type="email" value="{{old('email')}}" name="email" class="form-control"
+                                   placeholder="Email">
+                            {!! $errors->first('email','<span class="help-block">*:message</span>')!!}
+                        </div>
+                        <div class="col-md-12 m-b-20">
+                            <input required type="text" data-mask="(999) 999-9999" name="phone_1"
+                                   value="{{old('email')}}" class="form-control"
+                                   placeholder="Teléfono">
+                            {!! $errors->first('email','<span class="help-block">*:message</span>')!!}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Agregar
+                    </button>
+                    <button type="button" class="btn btn-default waves-effect"
+                            data-dismiss="modal">Cancel
+                    </button>
+                </div>
+            </form>
         </div>
         <!-- ============================================================== -->
         <!-- End PAge Content -->
@@ -218,7 +148,6 @@
 @stop
 @section('js')
     <script src="/backend/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/backend/js/update_state_users.js"></script>
     {{--<script>
         $(document).ready(function() {
             $('#admin_users').DataTable();

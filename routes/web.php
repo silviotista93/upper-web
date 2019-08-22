@@ -80,6 +80,10 @@ Route::group(['namespace'=>'Backend', 'middleware' => 'admin_permissions'],funct
     Route::get('/admin-users','Users\UserController@index')->name('admin-users');
     Route::post('/create-users','Users\UserController@store')->name('admin-create-users');
     Route::put('/update-state-users/{user}/{state}','UserController@update_state_users')->name('update_state_users');
+
+    //Lista de usuarios del sistema
+    Route::get('/datatables-users', 'Users\UserController@usersDataTables')->name('users.datatables');
+
     /*=============================================
     PERFIL USUARIOS
     =============================================*/
