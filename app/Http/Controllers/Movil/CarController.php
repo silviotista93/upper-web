@@ -41,12 +41,13 @@ class CarController extends Controller
             'user_id'       => 'required'
         ]);
         $user = User::where('id',$request->user()->id)->first();
-        // $path = $request->file('picture')->store('cars/'.$user->id);  
+        // Esta linea para hacer inserciones desde postman
+        $path = $request->file('picture')->store('cars/'.$user->id);  
 
         $car = new Car([
             'board'         => strtoupper($request->board),
-            // 'picture'       => '/storage/'. $path,
-            'picture'       => '/storage/'. $request->picture,
+            'picture'       => '/storage/'. $path,
+            // 'picture'       => '/storage/'. $request->picture,
             'car_type_id'   => $request->car_type_id,
             'cilindraje_id' => $request->cilindraje_id,
             'color_id'      => $request->color_id,
