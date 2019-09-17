@@ -42,7 +42,7 @@ class CarController extends Controller
         ]);
         $user = User::where('id',$request->user()->id)->first();
         // Esta linea para hacer inserciones desde postman
-        $path = $request->file('picture')->store('cars/'.$user->id);  
+        // $path = $request->file('picture')->store('cars/'.$user->id);  
 
         $car = new Car([
             'board'         => strtoupper($request->board),
