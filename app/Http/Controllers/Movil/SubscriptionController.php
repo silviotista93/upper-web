@@ -8,6 +8,8 @@ use App\Subscription;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Wash_type;
+use App\PlanTypeWash;
 
 class SubscriptionController extends Controller
 {
@@ -18,9 +20,9 @@ class SubscriptionController extends Controller
      */
     public function index(Request $request)
     {
-        $suscripciones = CarSubscription::with('car', 'suscriptions.plans')->whereHas('car.clients', function ($query) use ($request){
+        $suscripciones = CarSubscription::with('car', 'suscriptions.plans')->whereHas('car.clients', function ($query) use ($request) {
             $query->where('id', '=',  $request->user()->id);
-        })->orderby('updated_at','ASC')->get();
+        })->orderby('updated_at', 'ASC')->get();
         /*=============================================
         Solicitud solamente suscripciones activas
         =============================================*/
@@ -39,7 +41,8 @@ class SubscriptionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request){
+    public function create(Request $request)
+    {
 
         $suscription = new Subscription([
             'plan_id'   => $request->plan_id,
@@ -47,13 +50,45 @@ class SubscriptionController extends Controller
             'date_end' => Carbon::now()->addMonths(2),
         ]);
         $suscription->save();
+
+        $typeWash = Wash_type::where('plan_id', $request->plan_id)->get();
+
         $car_suscription = new CarSubscription([
             'subscription_id'   => $suscription->id,
             'cars_id' => $request->car_id,
         ]);
         $car_suscription->save();
         return response()->json([
-            'message' => 'Creado exitosamente!'], 201);
+            'message' => 'Creado exitosamente!'
+        ], 201);
+    }
+
+    public function getTypes(Request $request)
+    {
+
+        // dd([$request->plan_id, $request->name]);
+        $typeWash = PlanTypeWash::where('plan_id', $request->plan_id)->get();
+
+        $typeWash = PlanTypeWash::where('plan_id', $request->plan_id)->get();
+
+        foreach ($typeWash as $obj) {
+            $arrays[] = $obj->toArray();
+            // dd('id '. $obj->type_wash_id);
+            return response()->json([
+                'datos' => $obj,
+                'datos' => $arrays,
+                // 'id' => $id
+            ], 201);
+        }
+        for ($i = 0; $i < count($typeWash); $i++) {
+            
+         }
+        // $id = $typeWash->id;
+
+        // return response()->json([
+        //     'datos' => $typeWash,
+        //     // 'id' => $id
+        // ], 201);
     }
 
     /**

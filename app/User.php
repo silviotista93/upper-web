@@ -68,7 +68,7 @@ class User extends Authenticatable
      */
 
     protected $fillable = [
-        'names' ,'last_name', 'email', 'password','slug','avatar','phone_1','phone_2'
+        'names' ,'last_name', 'email', 'password','slug','avatar','phone_1','phone_2','account'
     ];
 
     public function sendPasswordResetNotification($token)

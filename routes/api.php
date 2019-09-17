@@ -74,6 +74,7 @@ Route::group(['middleware' => 'auth:api','prefix' => 'plans', 'namespace'=>'Movi
 });
 Route::group(['middleware' => 'auth:api','prefix' => 'suscripciones', 'namespace'=>'Movil'], function () {
     Route::get('/suscripciones', 'SubscriptionController@index');
+    Route::post('/types', 'SubscriptionController@getTypes');
     Route::post('/agregar-suscripcion', 'SubscriptionController@create');
 });
 

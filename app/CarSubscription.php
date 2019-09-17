@@ -26,7 +26,7 @@ class CarSubscription extends Model
 {
     protected $table = 'car_subscriptions';
     protected $fillable = [
-        'subscription_id', 'cars_id'
+        'subscription_id', 'cars_id','type_wash_id','quantity'
     ];
     public function car(){
         return $this->belongsTo(Car::class,'cars_id');
