@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Wash_type;
 use App\PlanTypeWash;
+use PhpParser\Node\Expr\Cast\Array_;
 
 class SubscriptionController extends Controller
 {
@@ -43,52 +44,50 @@ class SubscriptionController extends Controller
      */
     public function create(Request $request)
     {
-
         $suscription = new Subscription([
             'plan_id'   => $request->plan_id,
             'date_start' => Carbon::now(),
             'date_end' => Carbon::now()->addMonths(2),
         ]);
         $suscription->save();
+        $typeWash = PlanTypeWash::where('plan_id', $request->plan_id)->get();
 
-        $typeWash = Wash_type::where('plan_id', $request->plan_id)->get();
-
-        $car_suscription = new CarSubscription([
-            'subscription_id'   => $suscription->id,
-            'cars_id' => $request->car_id,
-        ]);
-        $car_suscription->save();
+        foreach ($typeWash as $obj) {
+            $car_suscription = new CarSubscription([
+                'subscription_id'   => $suscription->id,
+                'cars_id' => $request->car_id,
+                'type_wash_id' => $obj->type_wash_id,
+                'quantity' =>  $obj->quantity,
+            ]);
+            $car_suscription->save();
+        }
+        // $car_suscription = new CarSubscription([
+        //     'subscription_id'   => $suscription->id,
+        //     'cars_id' => $request->car_id,
+        // ]);
+        // $car_suscription->save();
         return response()->json([
-            'message' => 'Creado exitosamente!'
+            'message' => 'Creado exitosamente!',
+            'objeto' => $car_suscription,
         ], 201);
     }
 
     public function getTypes(Request $request)
     {
-
         // dd([$request->plan_id, $request->name]);
         $typeWash = PlanTypeWash::where('plan_id', $request->plan_id)->get();
 
-        $typeWash = PlanTypeWash::where('plan_id', $request->plan_id)->get();
-
+        $new = [];
+        $i = 0;
         foreach ($typeWash as $obj) {
-            $arrays[] = $obj->toArray();
-            // dd('id '. $obj->type_wash_id);
-            return response()->json([
-                'datos' => $obj,
-                'datos' => $arrays,
-                // 'id' => $id
-            ], 201);
+            $new[$i] = $obj;
+            $i++;
         }
-        for ($i = 0; $i < count($typeWash); $i++) {
-            
-         }
-        // $id = $typeWash->id;
-
-        // return response()->json([
-        //     'datos' => $typeWash,
-        //     // 'id' => $id
-        // ], 201);
+        return response()->json([
+            'otra resp' => $typeWash,
+            'new ' => $new,
+            // 'id' => $id
+        ], 201);
     }
 
     /**
