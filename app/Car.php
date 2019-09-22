@@ -51,8 +51,8 @@ class Car extends Model
         return $this->belongsTo(User::class,'user_id');
     }
 
-    public function subscription(){
-        return $this->belongsToMany(Subscription::class,'car_subscriptions','cars_id','subscription_id');
+    public function car_suscription(){
+        return $this->hasMany(CarSubscription::class,'cars_id');
     }
 
     public function cilindrajes(){

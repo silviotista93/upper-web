@@ -14,14 +14,14 @@ class CreateCarSubscriptionsTable extends Migration
     public function up()
     {
         Schema::create('car_subscriptions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('subscription_id');
-            $table->foreign('subscription_id')->references('id')->on('subscriptions');
+            $table->increments('id');           
             $table->unsignedInteger('cars_id');
             $table->foreign('cars_id')->references('id')->on('cars');
-            $table->unsignedInteger('type_wash_id');
-            $table->foreign('type_wash_id')->references('id')->on('wash_types');
-            $table->integer('quantity');
+            $table->unsignedInteger('plan_id');
+            $table->foreign('plan_id')->references('id')->on('plans');
+            $table->enum('state',[
+                \App\CarSubscription::ACTIVE,
+                \App\CarSubscription::INACTIVE])->default(\App\CarSubscription::ACTIVE);
             $table->timestamps();
         });
     }

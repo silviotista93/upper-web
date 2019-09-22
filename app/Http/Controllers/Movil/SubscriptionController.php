@@ -21,7 +21,7 @@ class SubscriptionController extends Controller
      */
     public function index(Request $request)
     {
-        $suscripciones = CarSubscription::with('car', 'suscriptions.plans')->whereHas('car.clients', function ($query) use ($request) {
+        $suscripciones = CarSubscription::with('car', 'suscriptions.plans')->distinct('plan_id')->whereHas('car.clients', function ($query) use ($request) {
             $query->where('id', '=',  $request->user()->id);
         })->orderby('updated_at', 'ASC')->get();
         /*=============================================
@@ -44,7 +44,7 @@ class SubscriptionController extends Controller
      */
     public function create(Request $request)
     {
-        $suscription = new Subscription([
+        $suscription = new CarSubscription([
             'plan_id'   => $request->plan_id,
             'date_start' => Carbon::now(),
             'date_end' => Carbon::now()->addMonths(2),
@@ -75,19 +75,28 @@ class SubscriptionController extends Controller
     public function getTypes(Request $request)
     {
         // dd([$request->plan_id, $request->name]);
-        $typeWash = PlanTypeWash::where('plan_id', $request->plan_id)->get();
+        // $typeWash = PlanTypeWash::where('plan_id', $request->plan_id)->get();
 
-        $new = [];
-        $i = 0;
-        foreach ($typeWash as $obj) {
-            $new[$i] = $obj;
-            $i++;
-        }
-        return response()->json([
-            'otra resp' => $typeWash,
-            'new ' => $new,
-            // 'id' => $id
-        ], 201);
+        // $new = [];
+        // $i = 0;
+        // foreach ($typeWash as $obj) {
+        //     $new[$i] = $obj;
+        //     $i++;
+        // }
+        // return response()->json([
+        //     'otra resp' => $typeWash,
+        //     'new ' => $new,
+        //     // 'id' => $id
+        // ], 201);
+
+        // $suscripciones = CarSubscription::with('car')->whereHas('car.clients', function ($query) use ($request) {
+        //     $query->where('id', '=',  $request->user()->id);
+        // })->orderby('updated_at', 'ASC')->get();
+        $suscripciones = CarSubscription::with('car')->whereHas('car.clients', function ($query) use ($request) {
+            $query->where('id', '=',  $request->user()->id);
+        })->orderby('updated_at', 'ASC')->get();
+
+        return response()->json(['suscripciones' => $suscripciones], 201);
     }
 
     /**

@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CarSubscription extends Model
 {
+    const ACTIVE = 1;
+    const INACTIVE = 2;
     protected $table = 'car_subscriptions';
     protected $fillable = [
         'subscription_id', 'cars_id','type_wash_id','quantity'
@@ -31,7 +33,7 @@ class CarSubscription extends Model
     public function car(){
         return $this->belongsTo(Car::class,'cars_id');
     }
-    public function suscriptions(){
-        return $this->belongsTo(Subscription::class,'subscription_id');
+    public function plans(){
+        return $this->belongsTo(Plan::class,'plan_id');
     }
 }

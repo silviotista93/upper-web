@@ -86,20 +86,21 @@ class DatabaseSeeder extends Seeder
         });
 
         /*=============================================
-        CREANDO 50 CARROS ASIGNADOS A UN CLIENTE
+        CREANDO 50 CARROS ASIGNADOS A UN CLIENTE Y UN PLAN
         =============================================*/
-        factory(\App\Car::class, 50)->create()
-        ->each(function (\App\Car $car){
-            factory(\App\Subscription::class, 1)->create()->each(function (\App\Subscription $s) use ($car){
-               /* $s->car()->attach($car->id);*/
-                $data = array(
-                    array('cars_id'=>\App\Car::all()->random()->id, 'subscription_id'=> \App\Subscription::all()->random()->id, 'type_wash_id' => \App\Wash_type::all()->random()->id, 'quantity' => rand(1,5)),
-                );
-                DB::table('car_subscriptions')
-                    ->insert($data);
+            factory(\App\Car::class, 50)->create()
+            ->each(function (\App\Car $car){
+                factory(\App\CarSubscription::class, 1)->create()->each(function () use ($car){
+                   /* $s->car()->attach($car->id);*/
+                    $data = array(
+                        array('cars_id'=>\App\Car::all()->random()->id,  'plan_id' => \App\Plan::all()->random()->id)
+                    );
+                    
+                    DB::table('car_subscriptions')
+                        ->insert($data);
+                });
             });
-        });
-        factory(\App\Car::class, 20)->create();
+            factory(\App\Car::class, 20)->create();
     }
 }
 

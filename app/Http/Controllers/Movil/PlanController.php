@@ -97,7 +97,7 @@ class PlanController extends Controller
         return response()->json(['plan' => $plan]);
     }
     public function getCarsPlans(Request $request) {
-        $cars = Car::where('user_id', $request->user()->id)->with('color','cilindrajes','car_type','brand')->whereDoesntHave('subscription')->get();
+        $cars = Car::where('user_id', $request->user()->id)->with('color','cilindrajes','car_type','brand')->whereDoesntHave('car_suscription')->get();
         return response()->json(['cars' => $cars]);
     }
 }
