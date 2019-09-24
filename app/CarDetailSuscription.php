@@ -12,4 +12,5 @@ class CarDetailSuscription extends Model
     protected $fillable = [
         'carsus_id','plan_type_id','quantity'
     ];
+
 }
