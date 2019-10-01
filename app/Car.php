@@ -70,4 +70,8 @@ class Car extends Model
     public function brand(){
         return $this->belongsTo(Brand::class);
     }
+
+    public function order(){
+        return $this->belongsToMany(order::class);
+    }
 }

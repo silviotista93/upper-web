@@ -32,11 +32,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Plan extends Model
 {
-    public function wash_type(){
-        return $this->belongsToMany(Wash_type::class, 'plan_type_washes','plan_id','type_wash_id')->withPivot('quantity');
+    public function wash_type()
+    {
+        return $this->belongsToMany(Wash_type::class, 'plan_type_washes', 'plan_id', 'type_wash_id')->withPivot('quantity');
     }
 
-    public function subscription(){
+    public function subscription()
+    {
         return $this->hasOne(CarSubscription::class);
     }
 }

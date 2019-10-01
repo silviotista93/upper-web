@@ -29,9 +29,9 @@ class CarSubscription extends Model
     protected $table = 'car_subscriptions';
 
     protected $fillable = [
-        'cars_id', 'plan_id'
+        'cars_id', 'plan_id', 'date_start', 'date_end'
     ];
-    
+
     public function car()
     {
         return $this->belongsTo(Car::class, 'cars_id');
@@ -40,8 +40,16 @@ class CarSubscription extends Model
     {
         return $this->belongsTo(Plan::class, 'plan_id');
     }
+
     public function carDetail()
     {
-        return $this->belongsToMany(PlanTypeWash::class,'car_detail_suscriptions', 'carsus_id', 'plan_type_id');
+        return $this->belongsToMany(PlanTypeWash::class, 'car_detail_suscriptions', 'carsus_id', 'plan_type_id')->withPivot('id', 'quantity');
     }
+
+    // public function carDetailSusciption()
+    // {
+    //     return $this->belongsTo(CarDetailSuscription::class);
+    // }
+
+  
 }

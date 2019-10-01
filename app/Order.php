@@ -43,7 +43,7 @@ class Order extends Model
     const CANCELADO = 3;
 
     protected $fillable = [
-        'latitude' ,'longitude', 'status', 'sign','description','subscription_cars_id','washer_id','address','user_id'
+        'latitude' ,'longitude', 'status', 'sign','description','car_detail_subscription_id','washer_id','address','user_id'
     ];
 
     public function planTypeWash(){
@@ -51,10 +51,14 @@ class Order extends Model
     }
 
     public function car(){
-        return $this->belongsToMany(Car::class);
+        return $this->belongsTo(Car::class);
     }
 
-    public function suscription(){
-        return $this->belongsTo(Subscription::class,'subscription_cars_id');
+    // public function suscription(){
+    //     return $this->belongsTo(Subscription::class,'subscription_cars_id');
+    // }
+
+    public function carDetailSuscription(){
+        return $this->belongsTo(CarDetailSuscription::class,'car_detail_subscription_id');
     }
 }

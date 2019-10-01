@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Movil;
 
+use App\CarDetailSuscription;
 use App\CarSubscription;
 use App\Order;
 use App\Subscription;
@@ -17,7 +18,10 @@ class OrdenController extends Controller
      */
     public function index(Request $request)
     {
-        $orden = Order::where('user_id', $request->user()->id)->with('suscription.car.brand', 'suscription.plans.wash_type','planTypeWash')->get();
+        // $orden = Order::where('user_id', $request->user()->id)->with('suscription.car.brand', 'suscription.plans.wash_type','planTypeWash')->get();
+        $orden = Order::where('user_id', $request->user()->id)
+            ->with(['carDetailSuscription.carSus.car.brand', 'carDetailSuscription.planSus.washType'])
+            ->get();
         return response()->json(['orders' => $orden]);
     }
 
@@ -43,17 +47,18 @@ class OrdenController extends Controller
         $order = new Order([
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
-            'subscription_cars_id' => $request->subscription,
+            'car_detail_subscription_id' => $request->car_detail_subscription_id,
             'address' => $request->address,
             'user_id' => $request->user_id,
-            'description' => $request->description  
+            'description' => $request->description
 
         ]);
         $order->save();
-        $order->planTypeWash()->attach($request->typesWash);
+        // $order->planTypeWash()->attach($request->typesWash);
         return response()->json([
             'order'     => $order,
-            'message' => 'Orden creada exitosamente!'], 201);
+            'message' => 'Orden creada exitosamente!'
+        ], 201);
     }
 
     /**
@@ -64,13 +69,13 @@ class OrdenController extends Controller
      */
     public function show($id)
     {
-        $orden = Order::where('id', $id )->with('suscription.car', 'suscription.plans', 'planTypeWash')->first();
+        $orden = Order::where('id', $id)->with('suscription.car', 'suscription.plans', 'planTypeWash')->first();
         return response()->json(['detail-order' => $orden]);
     }
 
     public function  car_suscription($id)
     {
-        $car_suscription = CarSubscription::where('id', $id )->with('car')->first();
+        $car_suscription = CarSubscription::where('id', $id)->with('car')->first();
         return response()->json(['car_suscription' => $car_suscription]);
     }
 

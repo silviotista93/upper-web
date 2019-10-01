@@ -27,12 +27,15 @@ use Illuminate\Database\Eloquent\Model;
 class PlanTypeWash extends Model
 {
     protected $table = "plan_type_washes";
-   
-    public function washType(){
+
+    public function washType()
+    {
         return $this->hasOne(Wash_type::class, 'id', 'type_wash_id');
     }
 
-    public function carSuscription(){
-        return $this->belongsToMany(CarSubscription::class,'plan_type_id','carsus_id');
+    public function carSuscription()
+    {
+        return $this->belongsToMany(CarSubscription::class, 'plan_type_id', 'carsus_id');
     }
+    
 }

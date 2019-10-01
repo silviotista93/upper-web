@@ -22,8 +22,8 @@ class CreateOrdersTable extends Migration
             ])->default(\App\Order::PEDIDO);
             $table->string('sign')->nullable();
             $table->text('description')->nullable();
-            $table->unsignedInteger('subscription_cars_id');
-            $table->foreign('subscription_cars_id')->references('id')->on('car_subscriptions');
+            $table->unsignedInteger('car_detail_subscription_id');
+            $table->foreign('car_detail_subscription_id')->references('id')->on('car_detail_suscriptions');
             $table->unsignedInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedInteger('washer_id')->nullable();

@@ -14,7 +14,7 @@ class CreateCarDetailSuscriptionsTable extends Migration
     public function up()
     {
         Schema::create('car_detail_suscriptions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->unsignedInteger('carsus_id');
             $table->foreign('carsus_id')->references('id')->on('car_subscriptions');
             $table->unsignedInteger('plan_type_id');
